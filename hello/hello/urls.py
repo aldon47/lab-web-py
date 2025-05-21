@@ -20,8 +20,8 @@ from firstapp import views
 from django.contrib import admin
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
     path('', views.index),
-    path('about/',TemplateView.as_view(template_name="firstapp/about.html")),
-    path('contact/',TemplateView.as_view(template_name="firstapp/contact.html")),
+    path('create/', views.create),
+    path('edit/<int:id>/', views.edit),
+    path('delete/<int:id>/', views.delete),
 ]

@@ -1,17 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-
-<title>Приклад форми Django!</title>
+<meta charset="utf-8" />
+<title>Моделі в Django</title>
 </head>
-<body>
-<form method="POST">
+<body class="container">
+<form method="POST" action="create/">
 {% csrf_token %}
-<table>
-{{ form }}
-</table>
-<input type="submit" value="Відправити" >
+<p>
+<label>Введіть ім'я</label><br>
+<input type="text" name="name" />
+
+</p>
+<p>
+<label>Введіть вік</label><br>
+<input type="number" name="age" />
+</p>
+<input type="submit" value="Зберегти" >
 </form>
+{% if people.count > 0 %}
+<h2>Список користувачів</h2>
+<table>
+<tr><th>Id</th><th>Ім'я</th><th>Вік</th></tr>
+{% for person in people %}
+<tr><td>{{ person.id }}</td>
+<td>{{ person.name }}</td>
+<td>{{ person.age }}</td>
+<td><a href="edit/{{person.id}}">Змінити</a> </td>
+<td> <a href="delete/{{person.id}}">Видалити</a></td></tr>
+{% endfor %}
+</table>
+{% endif %}
 </body>
 </html>

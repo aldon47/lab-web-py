@@ -7,14 +7,51 @@ from .forms import UserForm
 from .models import User
 
 def index(request):
+    people = User.objects.all()
+    return render(request, "index.html", {"people": people})
+
+    # збереження даних в БД
+def create(request):
     if request.method == "POST":
-        name = request.POST.get("name")  # отримати значення поля Ім'я
-        age = request.POST.get("age")  # значення поля Вік
-        output = "<h2>Користувач</h2><h3>Ім'я - {0}, Вік – {1}</h3>".format(name, age)
-        return HttpResponse(output)
-    else:
-        userform = UserForm()
-        return render(request, "index.html", {"form": userform})
+        klient = User()
+        klient.name = request.POST.get("name")
+        klient.age = request.POST.get("age")
+        klient.save()
+    return HttpResponseRedirect("/")
+
+# змінення даних у БД
+def edit(request, id):
+    try:
+        person = User.objects.get(id=id)
+        if request.method == "POST":
+            person.name = request.POST.get("name")
+            person.age = request.POST.get("age")
+            person.save()
+            return HttpResponseRedirect("/")
+        else:
+            return render(request, "edit.html", {"person": person})
+    except User.DoesNotExist:
+        return HttpResponseNotFound("<h2>Клієнт не знайдений</h2>")
+
+# видалення даних із БД
+def delete(request, id):
+    try:
+        person = User.objects.get(id=id)
+        person.delete()
+        return HttpResponseRedirect("/")
+    except User.DoesNotExist:
+        return HttpResponseNotFound("<h2>Клієнт не знайдений</h2>")
+
+
+
+
+
+
+
+
+
+
+
 
 def about(request):
     return HttpResponse("About")
